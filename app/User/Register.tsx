@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { registerUser, login } from "../../api/auth"; 
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { registerUser, login } from "../../api/auth";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 export default function Register() {
   const router = useRouter();
@@ -12,8 +20,6 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
-
   const handleRegister = async () => {
     if (!username.trim() || !email.includes("@") || !password) {
       alert("All fields are required and email must be valid");
@@ -44,51 +50,43 @@ export default function Register() {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.title}>Register</Text>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.keyboardWrap}>
+          <View style={styles.innerContainer}>
+            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.subtitle}>Join Glamora for curated fashion and quick checkout.</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            placeholderTextColor="#ffffffff"
-            value={username}
-            onChangeText={setUsername}
-            onFocus={() => setFocusedInput("username")}
-            onBlur={() => setFocusedInput(null)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#ffffffff"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            onFocus={() => setFocusedInput("email")}
-            onBlur={() => setFocusedInput(null)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#ffffffff"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            onFocus={() => setFocusedInput("password")}
-            onBlur={() => setFocusedInput(null)}
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              placeholderTextColor="#9A938B"
+              value={username}
+              onChangeText={setUsername}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#9A938B"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#9A938B"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
-          <Pressable onPress={handleRegister} style={styles.buttonWrapper}>
-            <LinearGradient
-              colors={["#FF6B6B", "#FF8E53"]}
-              style={styles.buttonContainer}
-            >
+            <Pressable onPress={handleRegister} style={({ pressed }) => [styles.buttonContainer, pressed && styles.buttonPressed]}>
               <Text style={styles.buttonText}>Register</Text>
-            </LinearGradient>
-          </Pressable>
+            </Pressable>
 
-          {message ? <Text style={styles.message}>{message}</Text> : null}
-        </View>
+            {message ? <Text style={styles.message}>{message}</Text> : null}
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </ImageBackground>
   );
@@ -100,54 +98,59 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.65)",
+    backgroundColor: "rgba(16,14,12,0.62)",
+    padding: spacing.lg,
+  },
+  keyboardWrap: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: wp("5%"),
   },
   innerContainer: {
     width: "100%",
-    alignItems: "center",
-    gap: 20,
-    backgroundColor: "rgba(255,255,255,0.05)",
-    paddingVertical: hp("5%"),
-    borderRadius: 20,
+    gap: spacing.md,
+    backgroundColor: "rgba(247,245,242,0.95)",
+    padding: spacing.lg,
+    borderRadius: radius.lg,
   },
   title: {
-    fontSize: 32,
+    fontSize: typography.h1,
     fontWeight: "700",
-    color: "#f9f8f7ff",
+    color: colors.textPrimary,
+  },
+  subtitle: {
+    color: colors.textSecondary,
+    fontSize: typography.body,
+    marginBottom: spacing.xs,
   },
   input: {
-    width: wp("80%"),
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderWidth: 1.5,
-    borderRadius: wp("15%"),
-    color: "#FFFFFF",
-    fontSize: 16,
-    borderColor:"white"
-  },
-  buttonWrapper: {
-    width: "80%",
-    marginTop: 10,
-    borderRadius: wp("20%"),
-    overflow: "hidden",
+    width: "100%",
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderWidth: 1,
+    borderRadius: radius.md,
+    color: colors.textPrimary,
+    fontSize: typography.body,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
   },
   buttonContainer: {
-    paddingVertical: 14,
-    borderRadius: wp("20%"),
+    paddingVertical: spacing.sm,
+    borderRadius: radius.round,
     alignItems: "center",
+    backgroundColor: colors.textPrimary,
+    minHeight: 48,
+    justifyContent: "center",
   },
+  buttonPressed: { opacity: 0.8 },
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: 18,
+    color: colors.surface,
+    fontSize: typography.h3,
     fontWeight: "600",
   },
   message: {
-    color: "#FF5252",
-    fontSize: 14,
-    marginTop: 10,
+    color: colors.danger,
+    fontSize: typography.caption,
+    marginTop: spacing.xs,
     textAlign: "center",
   },
 });

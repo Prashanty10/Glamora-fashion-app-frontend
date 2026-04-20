@@ -1,6 +1,8 @@
 import { useRouter } from "expo-router";
 import { View, StyleSheet, Image, Text, FlatList, Pressable, ListRenderItem } from "react-native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { colors, radius, spacing, typography } from "../../constants/theme";
+import React from "react";
 
 type Product = {
   id: string;
@@ -161,7 +163,11 @@ const products: Product[] = [
 
 
 
-export default function Account() {
+type ProductListProps = {
+  headerComponent?: React.ReactElement;
+};
+
+export default function Account({ headerComponent }: ProductListProps) {
   const router = useRouter();
 
   const renderItem: ListRenderItem<Product> = ({ item }) => (
@@ -175,81 +181,97 @@ export default function Account() {
       }
     >
       <Image style={styles.image} source={{ uri: item.image }} />
-      <Text style={styles.name}>{item.name}</Text>
-      <Text>
-        {item.price} | <Text style={styles.star}>⭐</Text>{" "}
-        <Text style={styles.rating}>{item.rating}</Text>
+      <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.metaRow}>
+        <Text style={styles.price}>{item.price}</Text>
+        {"  "}
+        <Text style={styles.rating}>{"\u2605"} {item.rating}</Text>
       </Text>
-      <Pressable>
-        <Text style={styles.buyBtn}>Buy Now</Text>
+      <Pressable style={({ pressed }) => [styles.buyBtn, pressed && styles.pressed]}>
+        <Text style={styles.buyBtnText}>View</Text>
       </Pressable>
     </Pressable>
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8F8F8" }}>
-      <Text
-        style={{
-          marginTop: hp("3%"),
-          marginLeft: wp("3%"),
-          fontSize: wp("4.5%"),
-          fontWeight: "600",
-        }}
-      >
-        Products Promo
-      </Text>
-
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <FlatList
+      data={products}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      numColumns={2}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.listContainer}
+      ListHeaderComponent={
+        <View>
+          {headerComponent}
+          <Text style={styles.sectionTitle}>New Arrivals</Text>
+        </View>
+      }
+    />
   );
 }
 
 const styles = StyleSheet.create({
+  sectionTitle: {
+    marginBottom: spacing.sm,
+    marginHorizontal: spacing.md,
+    fontSize: typography.h2,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+  listContainer: {
+    backgroundColor: colors.background,
+    paddingTop: spacing.lg,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.xl,
+    gap: spacing.sm,
+  },
   card: {
     flex: 1,
-    gap: hp("1.5%"),
-    paddingHorizontal: wp("4%"),
-    paddingVertical: hp("3%"),
-    backgroundColor: "white",
-    elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: wp("3%"),
-    margin: wp("2%"),
+    gap: spacing.xs,
+    padding: spacing.sm,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    marginHorizontal: spacing.xs,
   },
   image: {
-    height: hp("20%"),
-    width: wp("40%"),
-    resizeMode: "contain",
-    borderRadius: wp("2%"),
-    alignItems: "center",
+    height: hp("18%"),
+    width: "100%",
+    resizeMode: "cover",
+    borderRadius: radius.sm,
+    backgroundColor: "#F0ECE5",
   },
   name: {
-    flex: 1,
-    fontSize: wp("3.5%"),
-    textAlign: "center",
+    fontSize: typography.body,
+    fontWeight: "600",
+    color: colors.textPrimary,
+  },
+  metaRow: {
+    fontSize: typography.caption,
+    color: colors.textSecondary,
+  },
+  price: {
+    color: colors.textPrimary,
     fontWeight: "600",
   },
-  star: {
-    color: "gold",
-    fontSize: wp("4%"),
-  },
   rating: {
-    color: "#444",
+    color: colors.accent,
     fontWeight: "600",
   },
   buyBtn: {
-    color: "white",
-    backgroundColor: "black",
-    paddingVertical: hp("1.5%"),
-    paddingHorizontal: wp("3%"),
-    borderRadius: wp("10%"),
-    overflow: "hidden",
+    backgroundColor: colors.textPrimary,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.round,
+    marginTop: spacing.xs,
+  },
+  pressed: {
+    opacity: 0.8,
+  },
+  buyBtnText: {
+    color: colors.surface,
+    textAlign: "center",
+    fontWeight: "600",
   },
 });

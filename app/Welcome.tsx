@@ -1,14 +1,8 @@
-import React, { Component, useEffect } from "react";
-import { Text, View, Dimensions, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { Text, View, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-const { width, height } = Dimensions.get("window");
-import { 
-  widthPercentageToDP as wp, 
-  heightPercentageToDP as hp 
-} from 'react-native-responsive-screen';
-
-
+import { colors, spacing, typography } from "../constants/theme";
 
 export default function Welcome() {
   const router = useRouter();
@@ -18,19 +12,19 @@ export default function Welcome() {
     }, 4000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [router]);
   return (
-    <>
-      <LinearGradient
-        colors={["#1F1F1F", "#1F1F1F"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.container}
-      >
-        <Text style={styles.title}>Glamora</Text>
-        <Text style={styles.subtitle}>Glow in Every Outfit</Text>
-      </LinearGradient>
-    </>
+    <LinearGradient
+      colors={["#111111", "#1A1816"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
+      <View style={styles.content}>
+        <Text style={styles.title}>GLAMORA</Text>
+        <Text style={styles.subtitle}>Luxury wardrobe, curated for modern style.</Text>
+      </View>
+    </LinearGradient>
   );
 }
 
@@ -39,15 +33,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: spacing.lg,
+  },
+  content: {
+    alignItems: "center",
+    gap: spacing.sm,
   },
   title: {
-    color: "white",
-    fontSize: 40,
-    fontWeight: "600",
+    color: colors.surface,
+    fontSize: 42,
+    fontWeight: "700",
+    letterSpacing: 6,
   },
   subtitle: {
-    color: "white",
-    fontSize: 12,
-    fontWeight: "500",
+    color: "#D2CAC1",
+    fontSize: typography.body,
+    textAlign: "center",
+    lineHeight: 22,
   },
 });

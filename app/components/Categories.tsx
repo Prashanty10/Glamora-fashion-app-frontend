@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { Text, View, StyleSheet, ScrollView, Image, Pressable } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 const product = [
   {
@@ -63,10 +64,8 @@ export default function Categories() {
   const router = useRouter();
 
   return (
-    <>
-      <Text style={{ fontSize: wp("5%"), marginLeft: wp("2%"), fontWeight: "700" }}>
-        Categories
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.heading}>Categories</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.wrapper}>
           {product.map((item) => (
@@ -81,31 +80,45 @@ export default function Categories() {
           ))}
         </View>
       </ScrollView>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: spacing.lg,
+    gap: spacing.sm,
+  },
+  heading: {
+    fontSize: typography.h2,
+    marginLeft: spacing.md,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
   wrapper: {
     flexDirection: "row",
-    gap: wp("4%"),
-    paddingHorizontal: wp("3%"),
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   card: {
-    gap: hp("0.5%"),
-    backgroundColor: "white",
+    gap: spacing.xs,
+    backgroundColor: colors.surface,
     alignItems: "center",
-    elevation: 1,
-    borderRadius: wp("3%"),
-    padding: wp("2%"),
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: spacing.sm,
+    minWidth: wp("24%"),
   },
   image: {
-    height: hp("12%"),
-    width: wp("20%"),
+    height: hp("9%"),
+    width: wp("16%"),
     resizeMode: "contain",
   },
   name: {
-    fontSize: wp("3.5%"),
+    fontSize: typography.caption,
     fontWeight: "600",
+    color: colors.textPrimary,
+    textAlign: "center",
   },
 });

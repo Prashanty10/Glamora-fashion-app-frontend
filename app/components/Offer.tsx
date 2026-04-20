@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Text, View, StyleSheet, Image, Dimensions } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 const posterdata = [
   {
@@ -36,8 +36,6 @@ const posterdata = [
   },
 ];
 
-const width = Dimensions.get("window").width;
-
 export default function Offer() {
   const ref = React.useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
@@ -50,12 +48,11 @@ export default function Offer() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, alignItems: "center" }}>
+    <View style={styles.container}>
         <Carousel
           ref={ref}
           width={wp("95%")}
-          height={hp("32%")}
+          height={hp("27%")}
           data={posterdata}
           onProgressChange={progress}
           renderItem={({ item }) => (
@@ -73,47 +70,54 @@ export default function Offer() {
         <Pagination.Basic
           progress={progress}
           data={posterdata}
-          dotStyle={{ backgroundColor: "rgba(0,0,0,0.3)", borderRadius: 50, width: wp("2.5%"), height: wp("2.5%") }}
-          activeDotStyle={{ backgroundColor: "#da831f", width: wp("3%"), height: wp("3%") }}
+          dotStyle={{ backgroundColor: "#C7C0B7", borderRadius: 50, width: wp("2.3%"), height: wp("2.3%") }}
+          activeDotStyle={{ backgroundColor: colors.accent, width: wp("2.8%"), height: wp("2.8%") }}
           containerStyle={{ gap: wp("2%"), marginTop: hp("1.5%") }}
           onPress={onPressPagination}
         />
-      </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    marginTop: spacing.md,
+  },
   card: {
     overflow: "hidden",
-    borderRadius: wp("5%"),
+    borderRadius: radius.lg,
     marginHorizontal: wp("1%"),
   },
   textContainer: {
     position: "absolute",
-    top: hp("8%"),
+    top: hp("6%"),
     left: wp("5%"),
+    backgroundColor: "rgba(17,17,17,0.45)",
+    borderRadius: radius.md,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
   },
   title: {
-    color: "white",
-    fontSize: wp("5%"),
-    fontWeight: "700",
+    color: colors.surface,
+    fontSize: typography.body,
+    fontWeight: "600",
   },
   discount: {
-    color: "white",
-    fontSize: wp("6%"),
+    color: colors.surface,
+    fontSize: typography.h2,
     fontWeight: "800",
-    marginVertical: hp("0.5%"),
+    marginVertical: spacing.xxs,
   },
   subtitle: {
-    color: "white",
-    fontSize: wp("4.5%"),
-    fontWeight: "700",
+    color: "#E5DFD8",
+    fontSize: typography.caption,
+    fontWeight: "600",
   },
   posterimage: {
-    height: hp("32%"),
+    height: hp("27%"),
     width: wp("95%"),
-    borderRadius: wp("5%"),
+    borderRadius: radius.lg,
     resizeMode: "cover",
   },
 });

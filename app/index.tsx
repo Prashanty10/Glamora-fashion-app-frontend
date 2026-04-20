@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import { colors, spacing, typography } from "../constants/theme";
 
 const API_URL = "http://192.168.0.102:5000/api/auth";
 
@@ -29,18 +30,35 @@ export default function Index() {
           await AsyncStorage.clear();
           router.replace("/Welcome");
         }
-      } catch (err) {
+      } catch {
         await AsyncStorage.clear();
         router.replace("/Welcome");
       }
     };
 
     checkLogin();
-  }, []);
+  }, [router]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <ActivityIndicator size="large" color="blue" />
+    <View style={styles.container}>
+      <Text style={styles.brand}>Glamora</Text>
+      <ActivityIndicator size="large" color={colors.accent} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.background,
+    gap: spacing.md,
+  },
+  brand: {
+    fontSize: typography.h1,
+    color: colors.textPrimary,
+    fontWeight: "700",
+    letterSpacing: 2,
+  },
+});

@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { login } from "../../api/auth"; 
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { login } from "../../api/auth";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 export default function Login() {
   const router = useRouter();
@@ -37,38 +46,41 @@ export default function Login() {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.title}>Login</Text>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.keyboardWrap}>
+          <View style={styles.innerContainer}>
+            <Text style={styles.title}>Welcome Back</Text>
+            <Text style={styles.subtitle}>Sign in to continue shopping premium styles.</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#CCCCCC"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#9A938B"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#CCCCCC"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#9A938B"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
-          <Pressable style={styles.buttonContainer} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
-          </Pressable>
+            <Pressable style={({ pressed }) => [styles.buttonContainer, pressed && styles.buttonPressed]} onPress={()=>router.push("../tabs/Home")}>
+              <Text style={styles.buttonText}>Sign In</Text>
+            </Pressable>
 
-          {message ? <Text style={styles.message}>{message}</Text> : null}
+            {message ? <Text style={styles.message}>{message}</Text> : null}
 
-          <Pressable onPress={() => router.push("/User/Register")}>
-            <Text style={styles.registerLink}>Don't have an account? Register</Text>
-          </Pressable>
-        </View>
+            <Pressable onPress={() => router.push("/User/Register")} hitSlop={8}>
+              <Text style={styles.registerLink}>New to Glamora? Create Account</Text>
+            </Pressable>
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </ImageBackground>
   );
@@ -80,53 +92,67 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.65)",
+    backgroundColor: "rgba(16,14,12,0.62)",
+    padding: spacing.lg,
     justifyContent: "center",
-    alignItems: "center",
+  },
+  keyboardWrap: {
+    width: "100%",
+    justifyContent: "center",
   },
   innerContainer: {
-    width: wp("90%"),
-    alignItems: "center",
-    gap: hp("2%"),
+    width: "100%",
+    alignSelf: "center",
+    gap: spacing.md,
+    backgroundColor: "rgba(247,245,242,0.95)",
+    padding: spacing.lg,
+    borderRadius: radius.lg,
   },
   title: {
-    fontSize: wp("8%"),
+    fontSize: typography.h1,
     fontWeight: "700",
-    color: "#FFFFFF",
-    marginBottom: hp("2%"),
+    color: colors.textPrimary,
+  },
+  subtitle: {
+    color: colors.textSecondary,
+    fontSize: typography.body,
+    marginBottom: spacing.xs,
   },
   input: {
-    width: wp("80%"),
-    paddingVertical: hp("1.5%"),
-    paddingHorizontal: wp("3%"),
-    borderWidth: 1.5,
-    borderColor: "#FFFFFF",
-    borderRadius: wp("15%"),
-    color: "#FFFFFF",
-    fontSize: wp("4%"),
+    width: "100%",
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    color: colors.textPrimary,
+    fontSize: typography.body,
+    backgroundColor: colors.surface,
   },
   buttonContainer: {
-    marginTop: hp("2%"),
-    backgroundColor: "#ffa46bff",
-    paddingVertical: hp("1.5%"),
-    paddingHorizontal: wp("10%"),
-    borderRadius: wp("20%"),
+    marginTop: spacing.sm,
+    backgroundColor: colors.textPrimary,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.round,
+    minHeight: 48,
+    justifyContent: "center",
   },
+  buttonPressed: { opacity: 0.8 },
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: wp("4.5%"),
+    color: colors.surface,
+    fontSize: typography.h3,
     fontWeight: "600",
     textAlign: "center",
   },
   message: {
-    color: "#FFD700",
-    fontSize: wp("4%"),
-    marginTop: hp("1%"),
+    color: colors.danger,
+    fontSize: typography.caption,
+    marginTop: spacing.xs,
   },
   registerLink: {
-    color: "#ffdbb6ff",
-    fontSize: wp("4%"),
-    marginTop: hp("1.5%"),
-    textDecorationLine: "underline",
+    color: colors.accent,
+    fontSize: typography.body,
+    marginTop: spacing.xs,
+    textAlign: "center",
   },
 });

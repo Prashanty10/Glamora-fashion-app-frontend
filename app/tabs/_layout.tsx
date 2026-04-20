@@ -1,42 +1,44 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../../constants/theme";
 
 export default function RootLayout(){
   return(
-    <Tabs screenOptions={{headerShown:false,title:""}}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        title: "",
+        tabBarStyle: {
+          height: 72,
+          paddingTop: 8,
+          paddingBottom: 8,
+          borderTopWidth: 1,
+          borderTopColor: colors.border,
+          backgroundColor: colors.surface,
+        },
+        tabBarActiveTintColor: colors.textPrimary,
+        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "600",
+        },
+      }}
+    >
       <Tabs.Screen
         name="Home"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="home" size={32} color={"#000000ff"} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="home-outline" size={24} color={color} />
           ),
-          tabBarStyle: {
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-          },
-          tabBarLabelStyle:{
-            fontSize:15,
-            fontWeight:700,
-            
-          },
         }}
       />
 
       <Tabs.Screen
         name="Cart"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="cart" size={32} color={"#040404ff"} />
-          ),
-          tabBarStyle: {
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-          },
-          tabBarLabelStyle:{
-            fontSize:15,
-            fontWeight:700,
-            
-          },
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="bag-handle-outline" size={24} color={color} />
+          )
         }}
       />
 
@@ -44,15 +46,9 @@ export default function RootLayout(){
       <Tabs.Screen
         name="Profile"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="person-circle" size={33} color={"#000000ff"} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="person-circle-outline" size={24} color={color} />
           ),
-          
-           tabBarLabelStyle:{
-            fontSize:15,
-            fontWeight:700,
-            
-          }
         }}
       />
     </Tabs>

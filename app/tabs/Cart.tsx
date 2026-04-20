@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Ionicons } from "@expo/vector-icons";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 type Product = {
   id: string;
@@ -69,6 +70,8 @@ const cart: Product[] = [
 ];
 
 export default function Cart() {
+  const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
   const renderItem = ({ item }: { item: Product }) => (
     <View style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.image} />
@@ -78,14 +81,14 @@ export default function Cart() {
         <Text style={styles.quantity}>Qty: {item.quantity}</Text>
         <Text style={styles.price}>${item.price.toFixed(2)}</Text>
       </View>
-      <Pressable>
-  <Ionicons name="trash-outline" size={24} color="red" />
-</Pressable>
+      <Pressable hitSlop={8}>
+        <Ionicons name="trash-outline" size={22} color={colors.danger} />
+      </Pressable>
     </View>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Cart</Text>
       </View>
@@ -94,57 +97,117 @@ export default function Cart() {
         data={cart}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        contentContainerStyle={{ padding: wp("5%") }}
+        contentContainerStyle={styles.list}
       />
+      <View style={styles.checkoutBar}>
+        <View>
+          <Text style={styles.subtotalLabel}>Subtotal</Text>
+          <Text style={styles.subtotal}>${subtotal.toFixed(2)}</Text>
+        </View>
+        <Pressable style={({ pressed }) => [styles.checkoutButton, pressed && styles.pressed]}>
+          <Text style={styles.checkoutText}>Checkout</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
   header: {
     alignItems: "center",
-    paddingVertical: hp("2%"),
-    backgroundColor: "#fff",
-    elevation: 3,
+    paddingVertical: spacing.md,
+    backgroundColor: colors.background,
   },
   headerText: {
-    fontSize: wp("5%"),
+    fontSize: typography.h2,
     fontWeight: "700",
+    color: colors.textPrimary,
+  },
+  list: {
+    paddingHorizontal: spacing.md,
+    paddingBottom: 120,
   },
   card: {
     flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: wp("3%"),
-    marginBottom: hp("2%"),
-    elevation: 2,
-    padding: wp("3%"),
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    marginBottom: spacing.sm,
+    padding: spacing.sm,
+    borderColor: colors.border,
+    borderWidth: 1,
+    alignItems: "center",
+    gap: spacing.sm,
   },
   image: {
-    width: wp("30%"),
-    height: hp("15%"),
-    borderRadius: wp("2%"),
-    resizeMode: "contain",
+    width: wp("24%"),
+    height: hp("12%"),
+    borderRadius: radius.sm,
+    resizeMode: "cover",
+    backgroundColor: "#F0ECE5",
   },
   details: {
     flex: 1,
-    marginLeft: wp("4%"),
     justifyContent: "space-around",
+    gap: spacing.xxs,
   },
   name: {
-    fontSize: wp("4%"),
+    fontSize: typography.body,
     fontWeight: "600",
+    color: colors.textPrimary,
   },
   size: {
-    fontSize: wp("3.5%"),
-    color: "#555",
+    fontSize: typography.caption,
+    color: colors.textSecondary,
   },
   quantity: {
-    fontSize: wp("3.5%"),
-    color: "#555",
+    fontSize: typography.caption,
+    color: colors.textSecondary,
   },
   price: {
-    fontSize: wp("4%"),
+    fontSize: typography.body,
     fontWeight: "700",
-    color: "#000",
+    color: colors.textPrimary,
+  },
+  checkoutBar: {
+    position: "absolute",
+    left: spacing.md,
+    right: spacing.md,
+    bottom: spacing.md,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  subtotalLabel: {
+    fontSize: typography.caption,
+    color: colors.textSecondary,
+  },
+  subtotal: {
+    fontSize: typography.h3,
+    color: colors.textPrimary,
+    fontWeight: "700",
+  },
+  checkoutButton: {
+    backgroundColor: colors.textPrimary,
+    borderRadius: radius.round,
+    paddingHorizontal: spacing.lg,
+    minHeight: 44,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkoutText: {
+    color: colors.surface,
+    fontWeight: "700",
+  },
+  pressed: {
+    opacity: 0.85,
   },
 });

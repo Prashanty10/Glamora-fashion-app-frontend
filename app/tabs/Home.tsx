@@ -5,18 +5,17 @@ import {
   Pressable,
   TextInput,
   StyleSheet,
-  ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import {
   widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Categories from "../components/Categories";
 import Product from "../components/Product";
 import Offer from "../components/Offer";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 export default function Home() {
   const [username, setUsername] = useState("");
@@ -31,14 +30,16 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <Product
+        headerComponent={
+          <View>
         <View style={styles.header}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-            <Ionicons name="person-circle" size={wp("10%")} color="grey" />
-            <Text style={{fontSize:16}}>{username}</Text>
+          <View style={styles.profileRow}>
+            <Ionicons name="person-circle" size={wp("10%")} color={colors.textPrimary} />
+            <Text style={styles.username}>{username || "User"}</Text>
           </View>
-          <Pressable>
-            <Ionicons name="cart" size={wp("7%")} color="black" />
+          <Pressable style={styles.iconButton}>
+            <Ionicons name="bag-outline" size={wp("6%")} color={colors.textPrimary} />
           </Pressable>
         </View>
 
@@ -46,25 +47,20 @@ export default function Home() {
           <Ionicons
             name="search"
             size={wp("6%")}
-            color="black"
+            color={colors.textSecondary}
             style={styles.searchIcon}
           />
           <TextInput
-            placeholder="Search"
+            placeholder="Search for shirts, shoes, accessories"
             style={styles.searchInput}
-            placeholderTextColor="grey"
+            placeholderTextColor={colors.textSecondary}
           />
         </View>
-        <View>
-          <Offer />
-        </View>
-        <View>
-          <Categories />
-        </View>
-        <View>
-          <Product />
-        </View>
-      </ScrollView>
+            <Offer />
+            <Categories />
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 }
@@ -72,34 +68,53 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
   },
   header: {
-    marginBottom: hp("1.8%"),
+    marginTop: spacing.md,
+    marginBottom: spacing.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: wp("3%"),
+    paddingHorizontal: spacing.md,
   },
-  headerText: {
-    fontSize: wp("5.5%"),
-    fontWeight: "700",
+  profileRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  username: {
+    fontSize: typography.h3,
+    color: colors.textPrimary,
+    fontWeight: "600",
+  },
+  iconButton: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: radius.round,
+    height: 44,
+    width: 44,
+    alignItems: "center",
+    justifyContent: "center",
   },
   search: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderRadius: wp("6%"),
-    height: hp("6%"),
-    marginHorizontal: wp("3%"),
-    paddingHorizontal: wp("3%"),
-    backgroundColor: "#f9f9f9",
+    borderRadius: radius.round,
+    borderColor: colors.border,
+    minHeight: 48,
+    marginHorizontal: spacing.md,
+    paddingHorizontal: spacing.md,
+    backgroundColor: colors.surface,
   },
   searchIcon: {
-    marginRight: wp("2%"),
+    marginRight: spacing.xs,
   },
   searchInput: {
     flex: 1,
-    fontSize: wp("4%"),
+    fontSize: typography.body,
+    color: colors.textPrimary,
   },
 });

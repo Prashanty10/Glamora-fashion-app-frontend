@@ -1,21 +1,6 @@
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  FlatList,
-  Pressable,
-  ListRenderItem,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  responsiveHeight,
-  responsiveWidth,
-} from "react-native-responsive-dimensions";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import CategoryGridScreen, { type CategoryProduct } from "../components/CategoryGridScreen";
 
-type Product = {
+type Product = CategoryProduct & {
   id: string;
   name: string;
   price: string;
@@ -138,99 +123,11 @@ const formalCloth: Product[] = [
 ];
 
 export default function Formal() {
-  const router = useRouter();
-
-  const renderItem: ListRenderItem<Product> = ({ item }) => (
-    <Pressable
-      style={styles.card}
-      onPress={() =>
-        router.push({
-          pathname: "/productCategories/Formal",
-          params: { item: JSON.stringify(item) },
-        })
-      }
-    >
-      <Image style={styles.image} source={{ uri: item.image }} />
-      <Text style={styles.name}>{item.name}</Text>
-      <Text>
-        {item.price} | <Text style={styles.star}>⭐</Text>{" "}
-        <Text style={styles.rating}>{item.rating}</Text>
-      </Text>
-      <Pressable>
-        <Text style={styles.buyBtn}>Buy Now</Text>
-      </Pressable>
-    </Pressable>
-  );
-
   return (
-    <SafeAreaView>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 10,
-          marginTop: 10,
-        }}
-      >
-        <Pressable onPress={() => router.push("/tabs/Home")}>
-          <Ionicons name="arrow-back" size={26} color="black" />
-        </Pressable>
-        <Text style={{ fontSize: 15, fontWeight: "600" }}>Formal Wear</Text>
-        <Pressable>
-          <Ionicons name="heart" size={30} color="red" />
-        </Pressable>
-      </View>
-
-      <FlatList
-        data={formalCloth}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-      />
-    </SafeAreaView>
+    <CategoryGridScreen
+      title="Formal Wear"
+      products={formalCloth}
+      detailRoute="/productCategories/Formal"
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginTop: 10,
-    flex: 1,
-    gap: responsiveHeight(1.5),
-    paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(3),
-    backgroundColor: "white",
-    elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: responsiveWidth(3),
-    margin: responsiveWidth(2),
-  },
-  image: {
-    height: responsiveHeight(20),
-    width: responsiveWidth(40),
-    resizeMode: "contain",
-    borderRadius: responsiveWidth(2),
-    alignItems: "center",
-  },
-  name: {
-    fontSize: 15,
-    textAlign: "center",
-    fontWeight: "600",
-  },
-  star: {
-    color: "gold",
-    fontSize: 16,
-  },
-  rating: {
-    color: "#444",
-    fontWeight: "600",
-  },
-  buyBtn: {
-    color: "white",
-    backgroundColor: "black",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: responsiveWidth(10),
-    overflow: "hidden",
-  },
-});

@@ -14,6 +14,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { colors, radius, spacing, typography } from "../../constants/theme";
 
 export default function Productdetails() {
   const { item } = useLocalSearchParams();
@@ -21,131 +22,161 @@ export default function Productdetails() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View
-          style={{
-            marginTop: hp("2%"),
-            paddingHorizontal: wp("5%"),
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Pressable
-            onPress={() => router.push("/tabs/Home")}
-            style={{
-              backgroundColor: "white",
-              padding: wp("2%"),
-              borderRadius: wp("5%"),
-              elevation: 3,
-            }}
-          >
-            <Ionicons name="arrow-back" size={26} color="black" />
+        <View style={styles.header}>
+          <Pressable onPress={() => router.push("/tabs/Home")} style={styles.iconButton}>
+            <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
           </Pressable>
-          <Text style={{ fontSize: wp("4.5%"), fontWeight: "600" }}>Details</Text>
-          <Pressable
-            style={{
-              backgroundColor: "white",
-              padding: wp("2%"),
-              borderRadius: wp("5%"),
-              elevation: 3,
-            }}
-          >
-            <Ionicons name="heart" size={28} color="red" />
+          <Text style={styles.headerTitle}>Product Details</Text>
+          <Pressable style={styles.iconButton}>
+            <Ionicons name="heart-outline" size={24} color={colors.textPrimary} />
           </Pressable>
         </View>
-        <View style={{ alignItems: "center", marginTop: hp("2%") }}>
+        <View style={styles.imageWrap}>
           <Image
-            style={{
-              height: hp("38%"),
-              width: wp("67%"),
-              borderRadius: wp("5%"),
-              resizeMode: "contain",
-            }}
+            style={styles.image}
             source={{ uri: product.image }}
           />
         </View>
-        <View
-          style={{
-            marginTop: hp("2%"),
-            marginHorizontal: wp("5%"),
-            backgroundColor: "white",
-            borderRadius: wp("3%"),
-            padding: wp("4%"),
-            elevation: 3,
-          }}
-        >
-          <Text style={{ fontSize: wp("5.5%"), fontWeight: "700" }}>
-            {product.name}
-          </Text>
-          <Text style={{ fontSize: wp("3.5%"), color: "#666", marginTop: hp("0.5%") }}>
-            ⭐ {product.rating} (25 reviews)
-          </Text>
-          <Text
-            style={{
-              fontSize: wp("3.5%"),
-              color: "#444",
-              marginTop: hp("1%"),
-            }}
-          >
-            Size: {product.size}
-          </Text>
+        <View style={styles.infoCard}>
+          <Text style={styles.name}>{product.name}</Text>
+          <Text style={styles.meta}>{"\u2605"} {product.rating} (25 reviews)</Text>
+          <Text style={styles.size}>Size: {product.size}</Text>
         </View>
-        <View
-          style={{
-            marginHorizontal: wp("5%"),
-            marginTop: hp("2%"),
-            backgroundColor: "white",
-            borderRadius: wp("3%"),
-            padding: wp("4%"),
-            elevation: 2,
-          }}
-        >
-          <Text style={{ fontSize: wp("5%"), fontWeight: "700", marginBottom: hp("1%") }}>
-            Description
-          </Text>
-          <Text style={{ fontSize: wp("3.5%"), color: "#555" }}>
-            {product.description}
-          </Text>
+        <View style={styles.descriptionCard}>
+          <Text style={styles.descriptionTitle}>Description</Text>
+          <Text style={styles.description}>{product.description}</Text>
         </View>
 
-        {/* Action Buttons */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginHorizontal: wp("5%"),
-            marginVertical: hp("3%"),
-            gap: wp("3%"),
-          }}
-        >
-          <Pressable
-            style={{
-              flex: 1,
-              backgroundColor: "#000",
-              paddingVertical: hp("2%"),
-              borderRadius: wp("5%"),
-              alignItems: "center",
-              elevation: 3,
-            }}
-          >
-            <Text style={{ color: "white", fontWeight: "700" }}>Buy Now</Text>
+        <View style={styles.actions}>
+          <Pressable style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
+            <Text style={styles.primaryText}>Buy Now</Text>
           </Pressable>
-          <Pressable
-            style={{
-              flex: 1,
-              backgroundColor: "#ff6b6b",
-              paddingVertical: hp("2%"),
-              borderRadius: wp("5%"),
-              alignItems: "center",
-              elevation: 3,
-            }}
-          >
-            <Text style={{ color: "white", fontWeight: "700" }}>Add to Cart</Text>
+          <Pressable style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
+            <Text style={styles.secondaryText}>Add to Cart</Text>
           </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  header: {
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: typography.h3,
+    fontWeight: "600",
+    color: colors.textPrimary,
+  },
+  iconButton: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.xs,
+    borderRadius: radius.round,
+  },
+  imageWrap: {
+    alignItems: "center",
+    marginTop: spacing.md,
+  },
+  image: {
+    height: hp("36%"),
+    width: wp("78%"),
+    borderRadius: radius.lg,
+    resizeMode: "cover",
+    backgroundColor: "#EFEAE3",
+  },
+  infoCard: {
+    marginTop: spacing.md,
+    marginHorizontal: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    gap: spacing.xs,
+  },
+  name: {
+    fontSize: typography.h2,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+  meta: {
+    fontSize: typography.caption,
+    color: colors.accent,
+    fontWeight: "600",
+  },
+  size: {
+    fontSize: typography.body,
+    color: colors.textSecondary,
+  },
+  descriptionCard: {
+    marginHorizontal: spacing.md,
+    marginTop: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  descriptionTitle: {
+    fontSize: typography.h3,
+    fontWeight: "700",
+    marginBottom: spacing.xs,
+    color: colors.textPrimary,
+  },
+  description: {
+    fontSize: typography.body,
+    color: colors.textSecondary,
+    lineHeight: 22,
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: spacing.md,
+    marginVertical: spacing.lg,
+    gap: spacing.sm,
+  },
+  primaryButton: {
+    flex: 1,
+    backgroundColor: colors.textPrimary,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.round,
+    alignItems: "center",
+    minHeight: 48,
+    justifyContent: "center",
+  },
+  primaryText: {
+    color: colors.surface,
+    fontWeight: "700",
+  },
+  secondaryButton: {
+    flex: 1,
+    backgroundColor: colors.accentSoft,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.round,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#D8C9B0",
+    minHeight: 48,
+    justifyContent: "center",
+  },
+  secondaryText: {
+    color: colors.textPrimary,
+    fontWeight: "700",
+  },
+  pressed: {
+    opacity: 0.8,
+  },
+});
