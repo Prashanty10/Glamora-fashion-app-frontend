@@ -21,20 +21,18 @@ This project includes **Welcome, Login, Home, Product, Profile, Cart, Categories
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="screenshots/welcome.jpg" width="200" />
-  <img src="screenshots/Login.jpg" width="200" />
-  <img src="screenshots/Regsiter.jpg" width="200" />
-  <img src="screenshots/homepage.jpg" width="200" />
-  <img src="screenshots/productdetails.jpg" width="200" />
+  <img src="screenshots/welcome.jpeg" width="200" />
+  <img src="screenshots/Login.jpeg" width="200" />
+  <img src="screenshots/Regsiter.jpeg" width="200" />
+  <img src="screenshots/homepage.jpeg" width="200" />
+  <img src="screenshots/productdetails.jpeg" width="200" />
 </p>
 
 <p align="center">
-  <img src="screenshots/profile.jpg" width="200" />
-  <img src="screenshots/cart.jpg" width="200" />
-  <img src="screenshots/products.jpg" width="200" />
-  <img src="screenshots/mens-wear.jpg" width="200" />
-  <img src="screenshots/women-wear.jpg" width="200" />
-  <img src="screenshots/shoes.jpg" width="200" />
+  <img src="screenshots/profile.jpeg" width="200" />
+  <img src="screenshots/cart.jpeg" width="200" />
+  <img src="screenshots/products.jpeg" width="200" />
+  <img src="screenshots/mens-wear.jpeg" width="200" />
 </p>
 
 
