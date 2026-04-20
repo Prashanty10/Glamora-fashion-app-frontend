@@ -70,7 +70,7 @@ export default function Login() {
               secureTextEntry
             />
 
-            <Pressable style={({ pressed }) => [styles.buttonContainer, pressed && styles.buttonPressed]} onPress={()=>router.push("../tabs/Home")}>
+            <Pressable style={({ pressed }) => [styles.buttonContainer, pressed && styles.buttonPressed]} onPress={handleLogin}>
               <Text style={styles.buttonText}>Sign In</Text>
             </Pressable>
 
